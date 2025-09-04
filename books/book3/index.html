@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Triển lãm ảnh "80 NĂM - CẦN THƠ TỰ HÀO PHÁT TRIỂN VƯƠN XA"</title>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+  <!-- Turn.js -->
+  <script src="js/turn.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Times New Roman', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: url('background.jpg') center/cover no-repeat;
+    }
+
+    #flipbook {
+      box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.4s ease;
+    }
+
+    .page {
+      background-color: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+
+    .page img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .page-number {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      background-color: rgba(255,255,255,0.7);
+      padding: 2px 5px;
+      font-weight: bold;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .controls {
+      margin: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .controls button, .controls input {
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background-color: #ddd;
+    }
+
+    .home-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 8px 12px;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 999;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      text-decoration: none;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .home-btn:hover { background-color: #0056b3; transform: scale(1.05); }
+
+    /* Fullscreen button */
+    .fullscreen-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      padding: 8px 12px;
+      background-color: #28a745;
+      color: white;
+      border-radius: 5px;
+      z-index: 999;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .fullscreen-btn:hover { background-color: #1e7e34; }
+
+    @media screen and (max-width: 600px) {
+      #flipbook { width: 95%; height: auto; }
+      .controls { flex-direction: column; gap: 5px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <a href='../../index.html' class="home-btn">🏠 Thư Viện Triển Lãm</a>
+  <button class="fullscreen-btn" id="toggleFullscreen">⛶ Toàn màn hình</button>
+
+  <div class="controls">
+    <button id="prevPage">⬅️ Trang trước</button>
+    <button id="nextPage">Trang sau ➡️</button>
+    <button id="toggleAutoFlip">Bật auto lật</button>
+    <input type="number" id="pageInput" min="1" max="80" placeholder="Trang">
+    <button id="goToPage">Đi tới trang</button>
+    <button id="goToFirstPage">Trang đầu 🏠</button>
+  </div>
+
+  <div id="flipbook"></div>
+
+  <script>
+    $(document).ready(function () {
+      const totalRealPages = 80;
+      const totalPages = totalRealPages + 1;
+
+      // Thêm các trang
+      for(let i=1;i<=totalRealPages;i++){
+        $('#flipbook').append(`<div class="page"><img src="images/${i}.jpg"><div class="page-number">${i}</div></div>`);
+      }
+      $('#flipbook').append('<div class="page"></div>');
+
+      // Function scale flipbook
+      function scaleFlipbook(){
+        const windowWidth = $(window).width();
+        const windowHeight = $(window).height();
+        let width = Math.min(windowWidth*0.95, 800);
+        let height = width*0.625;
+        $('#flipbook').turn('size', width, height);
+
+        // Display mode
+        let displayMode = windowWidth < 600 ? 'single' : 'double';
+        $('#flipbook').turn('display', displayMode);
+      }
+
+      // Khởi tạo flipbook
+      $('#flipbook').turn({
+        width: 800,
+        height: 500,
+        autoCenter: true,
+        display: 'double',
+        acceleration: true
+      });
+
+      scaleFlipbook();
+      $(window).on('resize orientationchange', scaleFlipbook);
+
+      // Controls
+      $('#prevPage').click(()=>$('#flipbook').turn('previous'));
+      $('#nextPage').click(()=>$('#flipbook').turn('next'));
+      $('#goToPage').click(()=>{
+        let p = parseInt($('#pageInput').val());
+        if(!isNaN(p) && p>=1 && p<=totalRealPages) $('#flipbook').turn('page',p);
+      });
+      $('#goToFirstPage').click(()=>$('#flipbook').turn('page',1));
+
+      let autoFlip=false, autoFlipInterval;
+      $('#toggleAutoFlip').click(function(){
+        autoFlip=!autoFlip;
+        $(this).text(autoFlip?'Tắt auto lật':'Bật auto lật');
+        if(autoFlip){
+          autoFlipInterval=setInterval(()=>$('#flipbook').turn('next'),2000);
+        }else clearInterval(autoFlipInterval);
+      });
+
+      // Fullscreen
+      $('#toggleFullscreen').click(function(){
+        let el = document.documentElement;
+        if(!document.fullscreenElement){
+          if(el.requestFullscreen) el.requestFullscreen();
+          else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+          else if(el.msRequestFullscreen) el.msRequestFullscreen();
+        } else {
+          if(document.exitFullscreen) document.exitFullscreen();
+          else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+          else if(document.msExitFullscreen) document.msExitFullscreen();
+        }
+        setTimeout(scaleFlipbook, 300); // Re-scale after fullscreen change
+      });
+    });
+  </script>
+
+</body>
+</html>
