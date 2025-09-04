@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bảo tàng TP Cần Thơ - Triển lãm ảnh online</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+
+  <style>
+  /* ===== BODY ===== */
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: 'Times New Roman', Times, serif; /* ✅ toàn bộ chữ đứng */
+    text-align: center;
+    background: url('./images/library-bg.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  header img {
+    height: 70px;
+    width: auto;
+  }
+  header h1 {
+    font-style: normal; /* ✅ chữ đứng */
+    font-size: 2em;
+    margin: 0;
+    line-height: 1.2;
+  }
+  header small {
+    font-style: normal; /* chữ đứng */
+    font-size: 0.7em;
+    display: block;
+  }
+
+  /* ===== TÊN TRIỂN LÃM ===== */
+  #bookTitle {
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #ffd700;
+    font-family: 'Times New Roman', Times, serif; /* ✅ chữ đứng */
+    text-align: center;
+    text-shadow: 1px 1px 2px black;
+    transition: opacity 0.6s ease; /* ✅ fade mượt */
+    opacity: 1;
+  }
+
+  /* ===== SWIPER ===== */
+  .swiper {
+    width: 100%;
+    height: 75vh; /* chuẩn chiều cao */
+    margin: auto;
+    cursor: pointer;
+  }
+  .swiper-slide {
+    aspect-ratio: 2 / 3;
+    width: auto !important;
+    max-width: 220px; /* chuẩn max-width */
+    height: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 0.5;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .swiper-slide-active {
+    max-width: 260px;
+    opacity: 1;
+    transform: scale(1.05);
+    z-index: 10;
+  }
+  .swiper-slide-prev,
+  .swiper-slide-next {
+    opacity: 0.8;
+    transform: scale(0.85);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer-text {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    font-style: normal; /* chữ đứng */
+    font-size: 1em;
+    color: white;
+    opacity: 0.8;
+  }
+
+  /* ===== NAV BUTTON ===== */
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: white;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media screen and (max-width: 480px) {
+    header h1 { font-size: 1.5em; }
+    .swiper-slide { max-width: 140px; }
+    .swiper-slide-active { max-width: 180px; }
+    #bookTitle { font-size: 1.3em; }
+  }
+
+  /* Landscape mobile */
+  @media screen and (orientation: landscape) {
+    .swiper { height: 80vh; }
+    .swiper-slide { max-width: 160px; }
+    .swiper-slide-active { max-width: 240px; }
+    #bookTitle { font-size: 1.5em; }
+  }
+</style>
+
+</head>
+<body>
+
+<header>
+  <img src="./images/logo.png" alt="Library Logo" />
+  <h1>
+    BẢO TÀNG THÀNH PHỐ CẦN THƠ<br />
+    <small>(Dự án triển lãm ảnh online)</small>
+  </h1>
+</header>
+
+<!-- Tên triển lãm -->
+<div id="bookTitle">Triển lãm ảnh </div>
+
+<!-- Swiper -->
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide" onclick="location.href='books/book1/index.html'" 
+         style="background-image: url('./images/book1.jpg')" 
+         data-title='Triển lãm ảnh: Triển lãm ảnh'></div>
+    <div class="swiper-slide" onclick="location.href='books/book2/index.html'" 
+         style="background-image: url('./images/book2.jpg')" 
+         data-title='Triển lãm ảnh: Triển lãm ảnh'></div>
+    <div class="swiper-slide" onclick="location.href='books/book3/index.html'" 
+         style="background-image: url('./images/book3.jpg')" 
+         data-title='Triển lãm ảnh: Triển lãm ảnh'></div>
+    <div class="swiper-slide" onclick="location.href='books/book4/index.html'" 
+         style="background-image: url('./images/book4.jpg')" 
+         data-title='Triển lãm ảnh: Triển lãm ảnh'></div>
+    <div class="swiper-slide" onclick="location.href='books/book5/index.html'" 
+         style="background-image: url('./images/book5.jpg')" 
+         data-title='Triển lãm ảnh: Triển lãm ảnh'></div>
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+</div>
+
+<!-- Footer -->
+<div class="footer-text">SẢN PHẨM THUỘC BẢN QUYỀN CỦA HỒNG PHÚ</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+window.addEventListener('load', () => {
+  const slideCount = document.querySelectorAll('.mySwiper .swiper-slide').length;
+  const bookTitleDiv = document.getElementById('bookTitle');
+
+  const swiper = new Swiper('.mySwiper', {
+    effect: 'coverflow',
+    centeredSlides: true,
+    slidesPerView: 'auto',
+    loop: true,
+    initialSlide: 0,
+    loopedSlides: slideCount,
+    loopAdditionalSlides: slideCount,
+    coverflowEffect: { rotate: 0, stretch: 0, depth: 120, modifier: 1, slideShadows: false },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    autoplay: { delay: 3000, disableOnInteraction: true },
+    keyboard: { enabled: true },
+    observer: true,
+    observeParents: true
+  });
+
+  // Hiển thị tên triển lãm khi load
+  bookTitleDiv.textContent = document.querySelector('.swiper-slide.swiper-slide-active').dataset.title;
+
+  // Fade chữ khi chuyển slide
+  swiper.on('slideChange', () => {
+    const activeSlide = document.querySelector('.swiper-slide.swiper-slide-active');
+    if (activeSlide) {
+      bookTitleDiv.style.opacity = 0;
+      setTimeout(() => {
+        bookTitleDiv.textContent = activeSlide.dataset.title;
+        bookTitleDiv.style.opacity = 1;
+      }, 300);
+    }
+  });
+
+  // Ép hiển thị slide đầu tiên
+  swiper.slideToLoop(0, 0, false);
+
+  // Autoplay tự động bật lại sau 1s không thao tác
+  let inactivityTimer;
+  function resetAutoplay() {
+    clearTimeout(inactivityTimer);
+    swiper.autoplay.stop();
+    inactivityTimer = setTimeout(() => { swiper.autoplay.start(); }, 1000);
+  }
+  ['click','mousemove','keydown','wheel','touchstart'].forEach(evt => {
+    document.addEventListener(evt, resetAutoplay);
+  });
+});
+</script>
+
+</body>
+</html>
